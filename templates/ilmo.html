@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ultimateilmo 2.0 - beta</title>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+
+  <script type="text/javascript">
+    function go_to(input) {
+      var page = document.getElementById(input).value;
+      if (page != "") {
+        window.location = page;
+      }
+    }
+  </script>
+
+</head>
+<body>
+  <select id="answer_select" onchange="go_to('answer_select')">
+    <option value="">Vastaa</option>
+    {% for player in players %}
+      <option value="/answer/{{player.id}}">{{player.name}}</option>
+    {% end %}
+  </select>
+  <button id="new_player" type="button" value="/new_player" onclick="go_to('new_player')">Uusi pelaaja</button>
+  <table id="ilmo_table">
+    <tr>
+      <th colspan="1"></th>
+      <th style="background-color:#00ccff;" colspan="6">La</th>
+      <th style="background-color:#0066ff;" colspan="6">Su</th>
+    </tr>
+    <tr>
+      <th>Pelaaja</th>
+      <th>9</th>
+      <th>11</th>
+      <th>13</th>
+      <th>15</th>
+      <th>17</th>
+      <th>19</th>
+      <th>9</th>
+      <th>11</th>
+      <th>13</th>
+      <th>15</th>
+      <th>17</th>
+      <th>19</th>
+    </tr>
+    {% for answer in answers %}
+      <tr class="answer_row">
+        <th class="player_name">{{answer.name}}</th>
+        {% for time in answer.times %}
+          {% if time=='yes' %}
+            <td class="answer_tile ok">{{time}}</td>
+          {% elif time=='no' %}
+            <td class="answer_tile no">{{time}}</td>
+          {% end %}
+        {% end %}
+        <td>{{answer.notes if answer.notes else ''}}</td>
+      </tr>
+    {% end %}
+  </table>
+</body>
+</html>

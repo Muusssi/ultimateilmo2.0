@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ultimateilmo 2.0 - Vastaaminen</title>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+
+  <script type="text/javascript">
+    function toggle_answer(time) {
+      var input = document.getElementById('time_input'+time);
+      var button = document.getElementById('time_btn'+time);
+      if (input.value == 'yes') {
+        input.value = 'no';
+        button.className = 'no';
+        button.innerHTML = 'No';
+      }
+      else if (input.value == 'no') {
+        input.value = 'yes';
+        button.className = 'ok';
+        button.innerHTML = 'OK';
+      }
+    }
+  </script>
+
+</head>
+<body>
+
+  <h1>{{player.name}}</h1>
+  <table>
+    <tr>
+      <td>
+        <form id="yes_form" method="post">
+          {% for i in range(0, 12) %}
+            <input form="yes_form" type="text" name="time" value="yes" hidden>
+          {% end %}
+          <input form="yes_form" type="text" name="person_id" value="{{player.id}}" hidden>
+          <input form="yes_form" type="text" name="notes" value="" hidden>
+          <button form="yes_form" type="submit">Tulen</button>
+        </form>
+      </td>
+      <td>
+        <form id="no_form" method="post">
+          {% for i in range(0, 12) %}
+            <input form="no_form" type="text" name="time" value="no" hidden>
+          {% end %}
+          <input form="no_form" type="text" name="person_id" value="{{player.id}}" hidden>
+          <input form="no_form" type="text" name="notes" value="" hidden>
+          <button form="no_form" type="submit">En tule</button>
+        </form>
+      </td>
+    </tr>
+  </table>
+
+  <h1>Tarkempi vastaus:</h1>
+
+  <form method="post">
+    <input type="text" name="person_id" value="{{player.id}}" hidden>
+
+    <table id="ilmo_table">
+      <tr>
+        <th colspan="6">La</th>
+        <th colspan="6">Su</th>
+      </tr>
+      <tr>
+        <th>9</th>
+        <th>11</th>
+        <th>13</th>
+        <th>15</th>
+        <th>17</th>
+        <th>19</th>
+        <th>9</th>
+        <th>11</th>
+        <th>13</th>
+        <th>15</th>
+        <th>17</th>
+        <th>19</th>
+      </tr>
+
+      <tr>
+      {% for i in range(0, 12) %}
+        {% if answer == None or answer.times[i] == 'yes' %}
+          <td>
+            <input id="time_input{{i}}" type="text" name="time" value="yes" hidden>
+            <button id="time_btn{{i}}" class="ok" type="button" onclick="toggle_answer({{i}})">OK</button>
+          </td>
+        {% elif answer.times[i] == 'no' %}
+          <td id="time{{i}}">
+            <input id="time_input{{i}}" type="text" name="time" value="no" hidden>
+            <button id="time_btn{{i}}" class="no" type="button" onclick="toggle_answer({{i}})">No</button>
+          </td>
+        {% end %}
+      {% end %}
+      </tr>
+    </table>
+    <h2>Selitys:</h2>
+    {% if answer %}
+      <input id="mobile_input" type="text" name="notes" value="{{answer.notes}}">
+    {% else %}
+      <input id="mobile_input" type="text" name="notes" value="">
+    {% end %}
+    <button type="submit">Vastaa</button>
+  </form>
+</body>
+</html>

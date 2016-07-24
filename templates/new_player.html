@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ultimateilmo 2.0 - Uusi pelaaja</title>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+
+</head>
+<body>
+
+  <form method="post">
+    <h2>Nimi:</h2>
+    {% if error %}
+      <h3 class="error_message">{{error}}</h3>
+    {% end %}
+    <input id="mobile_input" type="text" name="name" value="{{name}}" required>
+    <button type="submit">Lisää</button>
+  </form>
+
+</body>
+</html>
