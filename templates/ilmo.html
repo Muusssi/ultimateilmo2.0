@@ -43,6 +43,12 @@
       <th>17</th>
       <th>19</th>
     </tr>
+    <tr>
+      <th></th>
+      {% for num in numbers %}
+        <th>{{num}}</th>
+      {% end %}
+    </tr>
     {% for answer in answers %}
       <tr class="answer_row">
         <th class="player_name">{{answer.name}}</th>

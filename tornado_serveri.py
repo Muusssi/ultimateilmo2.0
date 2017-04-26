@@ -38,9 +38,11 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class MainPageHandler(BaseHandler):
     def get(self):
+        answers, numbers = self.db.answers()
         self.render("ilmo.html",
                 players=self.db.people(),
-                answers=self.db.answers(),
+                answers=answers,
+                numbers=numbers,
             )
 
 class AnswerHandler(BaseHandler):
