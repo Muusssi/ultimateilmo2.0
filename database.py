@@ -58,10 +58,11 @@ class Database(object):
         last_name = ''
         for row in self._query(query, None):
             name = row[0]
+            times = row[1:]
             if name != last_name:
                 last_name = name
                 answers.append(Answer(row))
-        return answers
+        return sorted(answers, key=lambda answer: answer.order)
 
     def answer(self, person_id):
         query = ('SELECT p.name, a.notes, a.time01, a.time02, a.time03, a.time04, a.time05, a.time06, '
@@ -94,6 +95,9 @@ class Answer(object):
         self.name = data[0]
         self.notes = data[1]
         self.times = data[2:]
+        self.order = sum([1 if time == "yes" else 0 for time in self.times])
+        if self.order == 0:
+            self.order = 100
 
 class Person(object):
     def __init__(self, name, person_id):
