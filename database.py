@@ -60,13 +60,13 @@ class Database(object):
         for row in self._query(query, None):
             name = row[0]
             times = row[2:]
-            for time in range(12):
-                if times[time] == 'yes':
-                    numbers[time] += 1
             if name != last_name:
                 last_name = name
                 answers.append(Answer(row))
-        return sorted(answers, key=lambda answer: answer.order), numbers
+                for time in range(12):
+                    if times[time] == 'yes':
+                        numbers[time] += 1
+        return sorted(answers, key=lambda answer: answer.order, reverse=False), numbers
 
     def answer(self, person_id):
         query = ('SELECT p.name, a.notes, a.time01, a.time02, a.time03, a.time04, a.time05, a.time06, '

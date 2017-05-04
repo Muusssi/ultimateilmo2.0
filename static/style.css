@@ -89,3 +89,8 @@ tr:nth-child(even) {
 #ilmo_table {
     width: 100%;
 }
+
+.enough {
+    background-color: yellow;
+}
+

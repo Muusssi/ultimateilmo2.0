@@ -46,7 +46,8 @@
     <tr>
       <th></th>
       {% for num in numbers %}
-        <th>{{num}}</th>
+        {% if num > 7 %}{% end %}
+        <th class="{% if num > 7 %}enough{% end %}">{{num}}</th>
       {% end %}
     </tr>
     {% for answer in answers %}
