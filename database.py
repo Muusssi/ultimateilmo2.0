@@ -3,35 +3,33 @@ import datetime
 
 class Database(object):
 
-    def __init__(self, pw):
-        self.dsn = "dbname='ilmo' user='ultimate_secretary' host='localhost' password='%s'" % (pw, )
-
-    # def _cursor(self):
-    #     return self._conn.cursor()
-
-    # def _close_connection(self):
-    #     self._conn.close()
-
-    # def _commit(self):
-    #     self._conn.commit()
-
-    def reconnect(self):
-        self._close_connection()
+    def __init__(self, database, host, user, password):
+        self._database_user = user
+        self._password = password
+        self._database_name = database
+        self._database_host = host
         self._connect()
 
+    def _connect(self):
+        self._conn = psycopg2.connect(
+                dbname=self._database_name,
+                user=self._database_user,
+                password=self._password,
+                host=self._database_host,
+            )
+        self._conn.autocommit = True
+
     def _query(self, sql, values):
-        with psycopg2.connect(self.dsn) as con:
-            with con.cursor() as cur:
-                cur.execute(sql, values)
-                rows = cur.fetchall()
+        with self._conn.cursor() as cur:
+            cur.execute(sql, values)
+            rows = cur.fetchall()
         if not rows:
             rows = []
         return rows
 
     def _insert(self, sql, values):
-        with psycopg2.connect(self.dsn) as con:
-            with con.cursor() as cur:
-                cur.execute(sql, values)
+        with self._conn.cursor() as cur:
+            cur.execute(sql, values)
 
     def people(self):
         people = []

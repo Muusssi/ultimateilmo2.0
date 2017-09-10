@@ -4,6 +4,7 @@ import tornado.httpserver
 import os
 import database as db
 import sys
+import json
 
 from psycopg2 import IntegrityError
 
@@ -11,6 +12,9 @@ APP_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIRECTORY = os.path.abspath(os.path.join(APP_DIRECTORY, 'static'))
 TEMPLATES_DIRECTORY = os.path.abspath(os.path.join(APP_DIRECTORY, 'templates'))
 
+def load_config_file(config_file):
+    with open(config_file, 'r') as f:
+        return json.load(f)
 
 
 class Application(tornado.web.Application):
@@ -90,10 +94,12 @@ class NewPlayerHandler(BaseHandler):
 
 if __name__ == "__main__":
     if (len(sys.argv) != 2):
-        print "error: missing password"
+        print "error: config file not given"
         exit(0)
 
-    httpserver = tornado.httpserver.HTTPServer(Application(db.Database(sys.argv[1])))
-    httpserver.listen(8080)
+    config = load_config_file(sys.argv[1])
+
+    httpserver = tornado.httpserver.HTTPServer(Application(db.Database(config['database'], config['host'], config['user'], config['password'])))
+    httpserver.listen(int(config['port']))
     tornado.ioloop.IOLoop.current().start()
 
