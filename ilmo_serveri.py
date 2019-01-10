@@ -60,6 +60,7 @@ class AnswerHandler(BaseHandler):
         self.db.register_answer(
                 self.get_argument('person_id'),
                 self.get_argument('notes'),
+                self.get_argument('friday'),
                 self.get_arguments('time'),
             )
         self.redirect("/")

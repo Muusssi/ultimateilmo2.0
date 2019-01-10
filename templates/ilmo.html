@@ -25,11 +25,13 @@
   <table id="ilmo_table">
     <tr>
       <th colspan="1"></th>
+      <th style="background-color:#ccccff;">Pe</th>
       <th style="background-color:#00ccff;" colspan="6">La</th>
       <th style="background-color:#0066ff;" colspan="6">Su</th>
     </tr>
     <tr>
       <th>Pelaaja</th>
+      <th>Perjantai</th>
       <th>9</th>
       <th>11</th>
       <th>13</th>
@@ -53,6 +55,13 @@
     {% for answer in answers %}
       <tr class="answer_row">
         <th class="player_name">{{answer.name}}</th>
+        {% if answer.friday=='yes' %}
+          <td class="answer_tile ok">{{answer.friday}}</td>
+        {% elif answer.friday=='no' %}
+          <td class="answer_tile no">{{answer.friday}}</td>
+        {% else %}
+          <td class="answer_tile empty">-</td>
+        {% end %}
         {% for time in answer.times %}
           {% if time=='yes' %}
             <td class="answer_tile ok">{{time}}</td>

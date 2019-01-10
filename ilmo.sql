@@ -9,6 +9,7 @@ CREATE TABLE answer(
     id serial PRIMARY KEY,
     person_id integer references person(id) not null,
     given_on timestamp default now(),
+    friday varchar(10),
     time01 varchar(10),
     time02 varchar(10),
     time03 varchar(10),

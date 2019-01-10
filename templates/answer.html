@@ -32,6 +32,7 @@
           {% for i in range(0, 12) %}
             <input form="yes_form" type="text" name="time" value="yes" hidden>
           {% end %}
+          <input form="yes_form" type="text" name="friday" value="yes" hidden>
           <input form="yes_form" type="text" name="person_id" value="{{player.id}}" hidden>
           <input form="yes_form" type="text" name="notes" value="" hidden>
           <button form="yes_form" type="submit">Tulen</button>
@@ -42,6 +43,7 @@
           {% for i in range(0, 12) %}
             <input form="no_form" type="text" name="time" value="no" hidden>
           {% end %}
+          <input form="no_form" type="text" name="friday" value="no" hidden>
           <input form="no_form" type="text" name="person_id" value="{{player.id}}" hidden>
           <input form="no_form" type="text" name="notes" value="" hidden>
           <button form="no_form" type="submit">En tule</button>
@@ -57,10 +59,12 @@
 
     <table id="ilmo_table">
       <tr>
+        <th>Perjantai</th>
         <th colspan="6">La</th>
         <th colspan="6">Su</th>
       </tr>
       <tr>
+        <th>Perjantai</th>
         <th>9</th>
         <th>11</th>
         <th>13</th>
@@ -76,6 +80,17 @@
       </tr>
 
       <tr>
+        {% if answer == None or answer.friday == 'yes' %}
+          <td>
+            <input id="time_inputfriday" type="text" name="friday" value="yes" hidden>
+            <button id="time_btnfriday" class="ok" type="button" onclick="toggle_answer('friday')">OK</button>
+          </td>
+        {% else %}
+          <td id="timefriday">
+            <input id="time_inputfriday" type="text" name="friday" value="no" hidden>
+            <button id="time_btnfriday" class="no" type="button" onclick="toggle_answer('friday')">No</button>
+          </td>
+        {% end %}
       {% for i in range(0, 12) %}
         {% if answer == None or answer.times[i] == 'yes' %}
           <td>

@@ -46,14 +46,15 @@ class Database(object):
         return person
 
     def answers(self):
-        query = ('SELECT p.name, a.notes, a.time01, a.time02, a.time03, a.time04, a.time05, a.time06, '
+        query = ('SELECT p.name, a.notes, a.friday, '
+                 'a.time01, a.time02, a.time03, a.time04, a.time05, a.time06, '
                  'a.time07, a.time08, a.time09, a.time10, a.time11, a.time12 '
                  'FROM person as p JOIN answer as a ON p.id=a.person_id '
                  'WHERE EXTRACT(WEEK FROM now()) = EXTRACT(WEEK FROM a.given_on) '
                  'AND EXTRACT(YEAR FROM now()) = EXTRACT(YEAR FROM a.given_on) '
                  'ORDER BY p.name, a.given_on DESC;')
         answers = []
-        numbers = [0 for _ in range(12)]
+        numbers = [0 for _ in range(13)]
         last_name = ''
         for row in self._query(query, None):
             name = row[0]
@@ -61,13 +62,14 @@ class Database(object):
             if name != last_name:
                 last_name = name
                 answers.append(Answer(row))
-                for time in range(12):
+                for time in range(13):
                     if times[time] == 'yes':
                         numbers[time] += 1
         return sorted(answers, key=lambda answer: answer.order, reverse=False), numbers
 
     def answer(self, person_id):
-        query = ('SELECT p.name, a.notes, a.time01, a.time02, a.time03, a.time04, a.time05, a.time06, '
+        query = ('SELECT p.name, a.notes, a.friday, '
+                 'a.time01, a.time02, a.time03, a.time04, a.time05, a.time06, '
                  'a.time07, a.time08, a.time09, a.time10, a.time11, a.time12 '
                  'FROM person as p JOIN answer as a ON p.id=a.person_id '
                  'WHERE EXTRACT(WEEK FROM now()) = EXTRACT(WEEK FROM a.given_on) '
@@ -80,11 +82,11 @@ class Database(object):
             answer = Answer(row)
         return answer
 
-    def register_answer(self, person_id, notes, times):
-        query = ('INSERT INTO answer(person_id, notes, time01, time02, time03, time04, time05, time06, '
+    def register_answer(self, person_id, notes, friday, times):
+        query = ('INSERT INTO answer(person_id, notes, friday, time01, time02, time03, time04, time05, time06, '
                  'time07, time08, time09, time10, time11, time12) '
-                 'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)')
-        self._insert(query, (person_id, notes, times[0], times[1], times[2], times[3], times[4],
+                 'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)')
+        self._insert(query, (person_id, notes, friday, times[0], times[1], times[2], times[3], times[4],
                        times[5], times[6], times[7], times[8], times[9], times[10], times[11]))
 
     def register_player(self, name):
@@ -96,8 +98,10 @@ class Answer(object):
     def __init__(self, data):
         self.name = data[0]
         self.notes = data[1]
-        self.times = data[2:]
+        self.friday = data[2]
+        self.times = data[3:]
         self.order = sum([1 if time == "yes" else 0 for time in self.times])
+        self.order += -12 if self.friday == 'yes' else 0
         if self.order == 0:
             self.order = 100
 
