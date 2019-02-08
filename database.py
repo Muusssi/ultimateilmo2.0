@@ -101,7 +101,7 @@ class Answer(object):
         self.friday = data[2]
         self.times = data[3:]
         self.order = sum([1 if time == "yes" else 0 for time in self.times])
-        self.order += -12 if self.friday == 'yes' else 0
+        self.order -= 20 if self.friday == 'yes' else 0
         if self.order == 0:
             self.order = 100
 
